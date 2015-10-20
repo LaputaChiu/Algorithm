@@ -1,6 +1,9 @@
 #include <stdio.h>
 #define MAX(a,b) ((a>b)?a:b)
 	
+/////////////////////////////////////////////////////////////////////////////////////////////
+// LCS by DP
+
 enum direct{
 	LEFT,
 	UP,
@@ -50,6 +53,18 @@ int LCS(char *str1, int len1, char *str2, int len2){
 	free(DP_array);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+// LCS by Recurrence
+
+int LCS_Length_recursive(char *str1, char *str2){\
+	if(*str1 == '\0' || *str2 == '\0') return 0;
+	if(*str1 == *str2) return LCS_Length_recursive(str1+1,str2+1) + 1;
+	else return MAX(LCS_Length_recursive(str1+1,str2),LCS_Length_recursive(str1,str2+1));
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// LCS Length space-efficient version
+
 // 1'd array space and 1 variable for storing left corner, to calculate length of LCS only.
 void LCS_Length_low_memory(char *str1, int len1, char *str2, int len2){
 	int i = 0,j = 0;
@@ -71,10 +86,18 @@ void LCS_Length_low_memory(char *str1, int len1, char *str2, int len2){
 	free(DP_array);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 int main(){
 	char str1[] = "DEBWEF";
 	char str2[] = "ENWERNT";
+	
 	LCS(str1, strlen(str1), str2, strlen(str2));
+	
 	LCS_Length_low_memory(str1, strlen(str1), str2, strlen(str2));
+	
+	int length = LCS_Length_recursive(str1, str2);
+	printf("LCS length(recursive): %d\n",length);
+	
 	return 0;
 }
